@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于Docker和vsftpd协议搭建FTP服务器 | Gao's Galaxy</title><meta name="author" content="Jensen Gao"><meta name="copyright" content="Jensen Gao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="FTP内置服务器搭建注意端口映射2020 -&gt; 20；2121 -&gt; 2121（如果你的20和21端口被占用的话） 123456789101112131415161718192021version: &#x27;3&#x27;services:  vsftpd:    image: fauria&#x2F;vsftpd    restart: always    container_name:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Docker和vsftpd协议搭建FTP服务器">
+<meta property="og:url" content="https://mayday7he5hy.github.io/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="Gao&#39;s Galaxy">
+<meta property="og:description" content="FTP内置服务器搭建注意端口映射2020 -&gt; 20；2121 -&gt; 2121（如果你的20和21端口被占用的话） 123456789101112131415161718192021version: &#x27;3&#x27;services:  vsftpd:    image: fauria&#x2F;vsftpd    restart: always    container_name:">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png">
+<meta property="article:published_time" content="2023-10-16T08:37:40.000Z">
+<meta property="article:modified_time" content="2023-11-03T02:48:27.513Z">
+<meta property="article:author" content="Jensen Gao">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png"><link rel="shortcut icon" href="/img/Jensen.png"><link rel="canonical" href="https://mayday7he5hy.github.io/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于Docker和vsftpd协议搭建FTP服务器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-03 10:48:27'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/cat.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Gao's Galaxy"><span class="site-name">Gao's Galaxy</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">基于Docker和vsftpd协议搭建FTP服务器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-10-16T08:37:40.000Z" title="Created 2023-10-16 16:37:40">2023-10-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-03T02:48:27.513Z" title="Updated 2023-11-03 10:48:27">2023-11-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于Docker和vsftpd协议搭建FTP服务器"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="FTP内置服务器搭建"><a href="#FTP内置服务器搭建" class="headerlink" title="FTP内置服务器搭建"></a>FTP内置服务器搭建</h2><p>注意端口映射2020 -&gt; 20；2121 -&gt; 2121（如果你的20和21端口被占用的话）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">vsftpd:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">fauria/vsftpd</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">ftp_for_kirin</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;2020:20&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;2121:21&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;21100-21110:21100-21110&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./files:/home/vsftpd</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">FTP_USER=admin</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">FTP_PASS=admin</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASV_ADDRESS=127.0.0.1</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASV_MIN_PORT=21100</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASV_MAX_PORT=21110</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">LOG_STDOUT=true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">LOG_STDERR=true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">LOG_FILE=/var/log/vsftpd.log</span></span><br></pre></td></tr></table></figure>
+
+<p>文件存储目录在宿主机的<code>/work/docker/ftp/files/kirin/</code></p>
+<p>用户名和密码自己设置即可</p>
+<p><code>PASV_ADDRESS</code>为自己的宿主机<code>ip</code></p>
+<p>测试成功与否：<code>MobaXTerm</code>或者<code>xftp</code>这类终端工具，可以连接上并且上传文件正常即搭建成功。</p>
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164014862.png" alt="image-20230416164014862"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://MayDay7he5hy.github.io">Jensen Gao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://mayday7he5hy.github.io/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/">https://mayday7he5hy.github.io/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post_share"><div class="social-share" data-image="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/10/18/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%95%99%E7%A8%8B/" title="frp内网穿透教程"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230218213701529.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">frp内网穿透教程</div></div></a></div><div class="next-post pull-right"><a href="/2023/10/10/Have-fun-in-Thailand/" title="Have fun in Thailand!!!"><img class="cover" src="https://picst.sunbangyan.cn/2023/11/02/5dfb8d84de17c4bc3eee4a7faf75c1af.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">Have fun in Thailand!!!</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/10/30/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/" title="Ubuntu下修改docker默认数据存储路径"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-30</div><div class="title">Ubuntu下修改docker默认数据存储路径</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/cat.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Jensen Gao</div><div class="author-info__description">Software Engineering student at Tongji University with dreams of pursuing a Master's in the U.S</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/MayDay7he5hy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/MayDay7he5hy" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/gaojuncheng020505@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my digital space! I'm thrilled you've stopped by. Here, you'll find a collection of my thoughts, stories, and insights, all curated with the hope of resonating with you.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FTP%E5%86%85%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">FTP内置服务器搭建</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's"><img src="https://picdm.sunbangyan.cn/2023/11/02/7f02a0746f7f0ac7d72a6727acf9b94f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="My Journey to Apply for Master's"/></a><div class="content"><a class="title" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's">My Journey to Apply for Master's</a><time datetime="2023-11-02T08:00:22.695Z" title="Created 2023-11-02 16:00:22">2023-11-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/30/%E4%BF%AE%E6%94%B9Docker%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%B7%AF%E5%BE%84/" title="Ubuntu下修改docker默认数据存储路径">Ubuntu下修改docker默认数据存储路径</a><time datetime="2023-10-30T13:56:29.000Z" title="Created 2023-10-30 21:56:29">2023-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/18/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%95%99%E7%A8%8B/" title="frp内网穿透教程"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230218213701529.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="frp内网穿透教程"/></a><div class="content"><a class="title" href="/2023/10/18/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%95%99%E7%A8%8B/" title="frp内网穿透教程">frp内网穿透教程</a><time datetime="2023-10-18T02:44:41.000Z" title="Created 2023-10-18 10:44:41">2023-10-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="基于Docker和vsftpd协议搭建FTP服务器"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于Docker和vsftpd协议搭建FTP服务器"/></a><div class="content"><a class="title" href="/2023/10/16/%E5%9F%BA%E4%BA%8EDocker%E5%92%8Cvsftpd%E5%8D%8F%E8%AE%AE%E6%90%AD%E5%BB%BAFTP%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="基于Docker和vsftpd协议搭建FTP服务器">基于Docker和vsftpd协议搭建FTP服务器</a><time datetime="2023-10-16T08:37:40.000Z" title="Created 2023-10-16 16:37:40">2023-10-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/10/Have-fun-in-Thailand/" title="Have fun in Thailand!!!"><img src="https://picst.sunbangyan.cn/2023/11/02/5dfb8d84de17c4bc3eee4a7faf75c1af.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Have fun in Thailand!!!"/></a><div class="content"><a class="title" href="/2023/10/10/Have-fun-in-Thailand/" title="Have fun in Thailand!!!">Have fun in Thailand!!!</a><time datetime="2023-10-10T09:30:57.000Z" title="Created 2023-10-10 17:30:57">2023-10-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230416164142324-16816345069691.png')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By Jensen Gao</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to Jensen's <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
