@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Devops---基于Docker实现GitLab企业开发过程全自动化 | Gao's Galaxy</title><meta name="author" content="Jensen Gao"><meta name="copyright" content="Jensen Gao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Devops—基于Docker实现GitLab企业开发过程全自动化搭建该流程化过程起因原项目gitlab仓库所在私服磁盘被docker数据占满，无法访问，容器寄掉了。于是自己动手在自己的私服上不想浪费那1TB的磁盘，于是从0开始完整搭建了gitlab仓库（企业用的比较多）、gitlab-runner（实现Devops的关键）、部署的全过程。下图是GitLab官网的介绍：The DevSecOps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Devops---基于Docker实现GitLab企业开发过程全自动化">
+<meta property="og:url" content="https://mayday7he5hy.github.io/2023/11/04/Devops/index.html">
+<meta property="og:site_name" content="Gao&#39;s Galaxy">
+<meta property="og:description" content="Devops—基于Docker实现GitLab企业开发过程全自动化搭建该流程化过程起因原项目gitlab仓库所在私服磁盘被docker数据占满，无法访问，容器寄掉了。于是自己动手在自己的私服上不想浪费那1TB的磁盘，于是从0开始完整搭建了gitlab仓库（企业用的比较多）、gitlab-runner（实现Devops的关键）、部署的全过程。下图是GitLab官网的介绍：The DevSecOps">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mayday7he5hy.github.io/img/cat.png">
+<meta property="article:published_time" content="2023-11-04T12:48:41.000Z">
+<meta property="article:modified_time" content="2023-11-06T02:07:37.758Z">
+<meta property="article:author" content="Jensen Gao">
+<meta property="article:tag" content="Devops">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mayday7he5hy.github.io/img/cat.png"><link rel="shortcut icon" href="/img/Jensen.png"><link rel="canonical" href="https://mayday7he5hy.github.io/2023/11/04/Devops/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Devops---基于Docker实现GitLab企业开发过程全自动化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-06 10:07:37'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/cat.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/wallpaper.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Gao's Galaxy"><span class="site-name">Gao's Galaxy</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Devops---基于Docker实现GitLab企业开发过程全自动化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-04T12:48:41.000Z" title="Created 2023-11-04 20:48:41">2023-11-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-06T02:07:37.758Z" title="Updated 2023-11-06 10:07:37">2023-11-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Devops---基于Docker实现GitLab企业开发过程全自动化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Devops—基于Docker实现GitLab企业开发过程全自动化"><a href="#Devops—基于Docker实现GitLab企业开发过程全自动化" class="headerlink" title="Devops—基于Docker实现GitLab企业开发过程全自动化"></a>Devops—基于Docker实现GitLab企业开发过程全自动化</h1><h2 id="搭建该流程化过程起因"><a href="#搭建该流程化过程起因" class="headerlink" title="搭建该流程化过程起因"></a>搭建该流程化过程起因</h2><p>原项目gitlab仓库所在私服磁盘被docker数据占满，无法访问，容器寄掉了。于是自己动手在自己的私服上不想浪费那1TB的磁盘，于是从0开始完整搭建了gitlab仓库（企业用的比较多）、gitlab-runner（实现Devops的关键）、部署的全过程。下图是GitLab官网的介绍：<a target="_blank" rel="noopener" href="https://about.gitlab.com/">The DevSecOps Platform | GitLab</a></p>
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230404213900259.png" alt="image-20230404213900259"></p>
+<h2 id="一、搭建gitlab仓库"><a href="#一、搭建gitlab仓库" class="headerlink" title="一、搭建gitlab仓库"></a>一、搭建gitlab仓库</h2><p>首先介绍一下如何搭建gitlab仓库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">搜索gitlab版本 我一般都用最新版latest</span></span><br><span class="line">docker search gitlab/gitlab-ce</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span></span><br><span class="line">docker pull gitlab/gitlab-ce</span><br></pre></td></tr></table></figure>
+
+<p>我没用docker run的命令来启动gitlab，因为我怕忘记命令，所以用的docker-compose.yml文件启动方式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.1&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">gitlab:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;gitlab/gitlab-ce:latest&#x27;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">gitlab</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">GITLAB_OMNIBUS_CONFIG:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        external_url &#x27;http://ip:8929&#x27; # 此处ip替换为你当前服务器/虚拟机的ip</span></span><br><span class="line"><span class="string">        gitlab_rails[&#x27;gitlab_shell_ssh_port&#x27;] = 2224</span></span><br><span class="line"><span class="string"></span>    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;8929:8929&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;2224:2224&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./config:/etc/gitlab&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./logs:/var/log/gitlab&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./data:/var/opt/gitlab&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动容器</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>注意：刚启动容器初始化比较慢，可能一直访问不了或者报502错误，不要紧张，等一会儿就行了。可以通过下面的命令来查看容器日志。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs -f [容器id/容器名]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230404210036687.png" alt="image-20230404210036687"></p>
+<p>gitlab默认用户名是root，密码需要我们进入gitlab容器内查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it gitlab cat /etc/gitlab/initial_root_password</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230404210100141.png" alt="image-20230404210100141"></p>
+<p>登录之后就可以在设置里面修改密码。</p>
+<p>之后就可以完成你想进行的操作了：repo、ci&#x2F;cd等等。</p>
+<h2 id="二、搭建gitlab-runner"><a href="#二、搭建gitlab-runner" class="headerlink" title="二、搭建gitlab-runner"></a>二、搭建gitlab-runner</h2><p>同样 docker安装gitlab-runner</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search gitlab/gitlab-runner</span><br></pre></td></tr></table></figure>
+
+<p>拉取gitlab-runner镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull gitlab/gitlab-runner</span><br></pre></td></tr></table></figure>
+
+<p>docker-compose.yml启动容器：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.1&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="attr">runner-guanfang:</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">gitlab/gitlab-runner:latest</span></span><br><span class="line">      <span class="attr">container_name:</span> <span class="string">gitlab-runner</span></span><br><span class="line">      <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">      <span class="attr">privileged:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">volumes:</span>        <span class="comment">#务必保证 /home/runner/config有写的权限否则容器启动会失败</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">./config:/etc/gitlab-runner</span>  <span class="comment">#容器与宿主机runner配置文件挂载，防止容器重启或者recreate数据丢失，这个很重要。</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock</span> <span class="comment">#用于runner容器共享宿主机的docker，不然在runner容器里起容器端口挂载就会有问题了。解决Docker in Docker的问题。</span></span><br></pre></td></tr></table></figure>
+
+<p>启动容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>gitlab-runner信息注册关联gitlab仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第一个gitlab-runner是容器名，第二个是image</span></span><br><span class="line">docker exec -it gitlab-runner gitlab-runner register</span><br></pre></td></tr></table></figure>
+
+<p>记下来就是注册信息 需要注意：最后选择docker版本的时候建议：<code>docker:latest</code></p>
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/479335d429e84e679aa410435d5bb080.png" alt="img"></p>
+<p>上图是你的gitlab仓库的某个项目的CI&#x2F;CD信息，可以看到URL和token，这是注册时需要的信息。注意注册时会有tags标签，这个在gitlab-ci.yml中需要指定，所以尽量不要乱起名字，需要保持一致，后续也可以在gitlab中修改。</p>
+<h3 id="gitlab-runner-config关键配置信息修改"><a href="#gitlab-runner-config关键配置信息修改" class="headerlink" title="gitlab-runner&#x2F;config关键配置信息修改"></a>gitlab-runner&#x2F;config关键配置信息修改</h3><p>在挂载的数据卷目录下：比如gitlab-runner&#x2F;config下有个config.toml文件，修改她。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim config.toml</span><br></pre></td></tr></table></figure>
+
+<p>基本配置如下：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">concurrent</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">check_interval</span> = <span class="number">0</span></span><br><span class="line"><span class="attr">shutdown_timeout</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="section">[session_server]</span></span><br><span class="line">  <span class="attr">session_timeout</span> = <span class="number">1800</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[runners]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;kirinea&#x27;s gitlab-rnner&quot;</span></span><br><span class="line">  <span class="attr">url</span> = <span class="string">&quot;http://ip:8929/&quot;</span>   <span class="comment"># gitlab的启动URL</span></span><br><span class="line">  <span class="attr">id</span> = <span class="number">1</span></span><br><span class="line">  <span class="attr">token</span> = <span class="string">&quot;************&quot;</span>    <span class="comment"># gitlab仓库ci/cd下runner 的 token</span></span><br><span class="line">  <span class="attr">token_obtained_at</span> = <span class="number">2023</span>-<span class="number">04</span>-<span class="number">03</span>T06:<span class="number">04</span>:<span class="number">11</span>Z</span><br><span class="line">  <span class="attr">token_expires_at</span> = <span class="number">0001</span>-<span class="number">01</span>-<span class="number">01</span>T00:<span class="number">00</span>:<span class="number">00</span>Z</span><br><span class="line">  <span class="attr">executor</span> = <span class="string">&quot;docker&quot;</span></span><br><span class="line">  <span class="section">[runners.cache]</span></span><br><span class="line">    <span class="attr">MaxUploadedArchiveSize</span> = <span class="number">0</span></span><br><span class="line">  <span class="section">[runners.docker]</span></span><br><span class="line">    <span class="attr">privileged</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">tls_verify</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">image</span> = <span class="string">&quot;docker:latest&quot;</span>    <span class="comment"># Docker in Docker 就按这个来准没错</span></span><br><span class="line">    <span class="attr">disable_entrypoint_overwrite</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">oom_kill_disable</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">disable_cache</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">volumes</span> = [<span class="string">&quot;/cache&quot;</span>, <span class="string">&quot;/var/run/docker.sock:/var/run/docker.sock&quot;</span>, <span class="string">&quot;/usr/bin/docker:/usr/bin/docker&quot;</span>, <span class="string">&quot;/root/.m2:/root/.m2&quot;</span>, <span class="string">&quot;/root/.ssh:/root/.ssh&quot;</span>, <span class="string">&quot;/root/.docker/:/root/.docker/&quot;</span>, <span class="string">&quot;/root/.npm/:/root/.npm/&quot;</span>] <span class="comment">#前提本机需要有安装maven、npm、打开ssh、docker等</span></span><br><span class="line">    <span class="attr">shm_size</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>好了 ，接下来就可以编写你项目的<code>gitlab-ci.yml</code>文件了。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/719968">Docker安装Gitlab和Gitlab-Runner并实现项目的CICD-阿里云开发者社区 (aliyun.com)</a></p>
+<h2 id="三、结合CI-CD执行build、deploy等自动化流程"><a href="#三、结合CI-CD执行build、deploy等自动化流程" class="headerlink" title="三、结合CI&#x2F;CD执行build、deploy等自动化流程"></a>三、结合CI&#x2F;CD执行build、deploy等自动化流程</h2><p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230404212424737.png" alt="image-20230404212424737"></p>
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230404212457942.png" alt="image-20230404212457942"></p>
+<h2 id="gitlab-ci-yml-和-Dockerfile-写法注意"><a href="#gitlab-ci-yml-和-Dockerfile-写法注意" class="headerlink" title="gitlab-ci.yml 和 Dockerfile 写法注意"></a>gitlab-ci.yml 和 Dockerfile 写法注意</h2><p>我们可以把ci&#x2F;cd当作一个大的脚本服务，里面可以打包镜像，执行docker build上传镜像，这里建议私有库，比如阿里云。</p>
+<p>流程一般如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker build</span><br><span class="line">docker tag</span><br><span class="line">docker push</span><br><span class="line">docker rmi</span><br></pre></td></tr></table></figure>
+
+<p>在gitlab-ci.yml一般分为多个stage：build、test、deploy、cleanup</p>
+<p>根据自己需求编写script。</p>
+<p>一般build阶段如上所述，deploy阶段通过类似于<code>ssh ip bash ***.sh</code>的脚本（前提是将runner所在服务器的ssh公钥放入目标部署服务器的可信公钥） ，这个脚本一般是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull、</span><br><span class="line">docker-compose up -d</span><br><span class="line">等等等等启动容器以及微服务注册中心等工具</span><br></pre></td></tr></table></figure>
+
+<p><strong>以上就是大致的整个过程 非常有意思和有意义</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://MayDay7he5hy.github.io">Jensen Gao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://mayday7he5hy.github.io/2023/11/04/Devops/">https://mayday7he5hy.github.io/2023/11/04/Devops/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Devops/">Devops</a></div><div class="post_share"><div class="social-share" data-image="/img/cat.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">k8s学习教程(基础配置)--part 1</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's"><img class="cover" src="https://picdm.sunbangyan.cn/2023/11/02/7f02a0746f7f0ac7d72a6727acf9b94f.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">My Journey to Apply for Master's</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/cat.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Jensen Gao</div><div class="author-info__description">Software Engineering student at Tongji University with dreams of pursuing a Master's in the U.S</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/MayDay7he5hy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/MayDay7he5hy" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/gaojuncheng020505@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my digital space! I'm thrilled you've stopped by. Here, you'll find a collection of my thoughts, stories, and insights, all curated with the hope of resonating with you.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Devops%E2%80%94%E5%9F%BA%E4%BA%8EDocker%E5%AE%9E%E7%8E%B0GitLab%E4%BC%81%E4%B8%9A%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">Devops—基于Docker实现GitLab企业开发过程全自动化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E8%AF%A5%E6%B5%81%E7%A8%8B%E5%8C%96%E8%BF%87%E7%A8%8B%E8%B5%B7%E5%9B%A0"><span class="toc-number">1.1.</span> <span class="toc-text">搭建该流程化过程起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%90%AD%E5%BB%BAgitlab%E4%BB%93%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text">一、搭建gitlab仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%90%AD%E5%BB%BAgitlab-runner"><span class="toc-number">1.3.</span> <span class="toc-text">二、搭建gitlab-runner</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gitlab-runner-config%E5%85%B3%E9%94%AE%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E4%BF%AE%E6%94%B9"><span class="toc-number">1.3.1.</span> <span class="toc-text">gitlab-runner&#x2F;config关键配置信息修改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BB%93%E5%90%88CI-CD%E6%89%A7%E8%A1%8Cbuild%E3%80%81deploy%E7%AD%89%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">三、结合CI&#x2F;CD执行build、deploy等自动化流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gitlab-ci-yml-%E5%92%8C-Dockerfile-%E5%86%99%E6%B3%95%E6%B3%A8%E6%84%8F"><span class="toc-number">1.5.</span> <span class="toc-text">gitlab-ci.yml 和 Dockerfile 写法注意</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230310101006602.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s初体验-minikube突破隔断访问限制(以nginx为例)"/></a><div class="content"><a class="title" href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)">k8s初体验-minikube突破隔断访问限制(以nginx为例)</a><time datetime="2023-11-10T01:08:25.000Z" title="Created 2023-11-10 09:08:25">2023-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/" title="k8s初体验---nginx(pod)部署并访问"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s初体验---nginx(pod)部署并访问"/></a><div class="content"><a class="title" href="/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/" title="k8s初体验---nginx(pod)部署并访问">k8s初体验---nginx(pod)部署并访问</a><time datetime="2023-11-09T10:26:19.000Z" title="Created 2023-11-09 18:26:19">2023-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s学习教程(基础配置)--part 1"/></a><div class="content"><a class="title" href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1">k8s学习教程(基础配置)--part 1</a><time datetime="2023-11-05T12:25:42.000Z" title="Created 2023-11-05 20:25:42">2023-11-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/04/Devops/" title="Devops---基于Docker实现GitLab企业开发过程全自动化">Devops---基于Docker实现GitLab企业开发过程全自动化</a><time datetime="2023-11-04T12:48:41.000Z" title="Created 2023-11-04 20:48:41">2023-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's"><img src="https://picdm.sunbangyan.cn/2023/11/02/7f02a0746f7f0ac7d72a6727acf9b94f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="My Journey to Apply for Master's"/></a><div class="content"><a class="title" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's">My Journey to Apply for Master's</a><time datetime="2023-11-02T08:00:22.695Z" title="Created 2023-11-02 16:00:22">2023-11-02</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/wallpaper.png')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By Jensen Gao</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to Jensen's <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

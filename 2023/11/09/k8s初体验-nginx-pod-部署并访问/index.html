@@ -1,0 +1,208 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>k8s初体验---nginx(pod)部署并访问 | Gao's Galaxy</title><meta name="author" content="Jensen Gao"><meta name="copyright" content="Jensen Gao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="k8s初学习—基于k8s部署nginx创建命名空间dev 1kubectl create ns dev  运行nginx 1kubectl run nginx --image&#x3D;nginx:1.17.1 --port&#x3D;80 --namespace&#x3D;dev   查看某个命名空间下的pod的信息 根据pod-name 1kubectl get pod nginx -n dev  试试访问pod 1cur">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s初体验---nginx(pod)部署并访问">
+<meta property="og:url" content="https://mayday7he5hy.github.io/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/index.html">
+<meta property="og:site_name" content="Gao&#39;s Galaxy">
+<meta property="og:description" content="k8s初学习—基于k8s部署nginx创建命名空间dev 1kubectl create ns dev  运行nginx 1kubectl run nginx --image&#x3D;nginx:1.17.1 --port&#x3D;80 --namespace&#x3D;dev   查看某个命名空间下的pod的信息 根据pod-name 1kubectl get pod nginx -n dev  试试访问pod 1cur">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png">
+<meta property="article:published_time" content="2023-11-09T10:26:19.000Z">
+<meta property="article:modified_time" content="2023-11-06T02:19:26.599Z">
+<meta property="article:author" content="Jensen Gao">
+<meta property="article:tag" content="k8s">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png"><link rel="shortcut icon" href="/img/Jensen.png"><link rel="canonical" href="https://mayday7he5hy.github.io/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'k8s初体验---nginx(pod)部署并访问',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-06 10:19:26'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/cat.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Gao's Galaxy"><span class="site-name">Gao's Galaxy</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">k8s初体验---nginx(pod)部署并访问</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-09T10:26:19.000Z" title="Created 2023-11-09 18:26:19">2023-11-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-06T02:19:26.599Z" title="Updated 2023-11-06 10:19:26">2023-11-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="k8s初体验---nginx(pod)部署并访问"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="k8s初学习—基于k8s部署nginx"><a href="#k8s初学习—基于k8s部署nginx" class="headerlink" title="k8s初学习—基于k8s部署nginx"></a>k8s初学习—基于k8s部署nginx</h1><p>创建命名空间dev</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create ns dev</span><br></pre></td></tr></table></figure>
+
+<p>运行nginx</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl run nginx --image=nginx:1.17.1 --port=80 --namespace=dev</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230308112157646.png" alt="image-20230308112157646"></p>
+<p>查看某个命名空间下的pod的信息 根据pod-name</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod nginx -n dev</span><br></pre></td></tr></table></figure>
+
+<p>试试访问pod</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl 172.17.0.5:80</span><br></pre></td></tr></table></figure>
+
+<img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230309160542890.png" alt="image-20230309160542890" style="zoom:50%;" />
+
+<p>很尴尬 不能访问 果然教程不帮你踩坑。</p>
+<p>问了chatgpt，给出几种方案。我试了第一种</p>
+<p>首先 我用<code>minikube ssh</code>指令之后 进入minikube内部，再访问居然成功了。</p>
+<img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230309160735086.png" alt="image-20230309160735086" style="zoom:50%;" />
+
+<p>接下来我继续问chatGPT这是为什么 ？</p>
+<img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230309161439775.png" alt="image-20230309161439775" style="zoom:50%;" />
+
+<p>但是实际上我测试了一下都是正常的 chatgpt并没有帮我解决？</p>
+<p>接下来就问了师兄，师兄一语中的，师兄总是那么神。</p>
+<img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230309161606272.png" alt="image-20230309161606272" style="zoom:50%;" />
+
+<p>所以chatGPT其实有的时候也并不是那么神啦！！！</p>
+<img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230309161656417.png" alt="image-20230309161656417" style="zoom:50%;" />
+
+<p>到此结束！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://MayDay7he5hy.github.io">Jensen Gao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://mayday7he5hy.github.io/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/">https://mayday7he5hy.github.io/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/k8s/">k8s</a></div><div class="post_share"><div class="social-share" data-image="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230310101006602.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">k8s初体验-minikube突破隔断访问限制(以nginx为例)</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">k8s学习教程(基础配置)--part 1</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-05</div><div class="title">k8s学习教程(基础配置)--part 1</div></div></a></div><div><a href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)"><img class="cover" src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230310101006602.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-10</div><div class="title">k8s初体验-minikube突破隔断访问限制(以nginx为例)</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/cat.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Jensen Gao</div><div class="author-info__description">Software Engineering student at Tongji University with dreams of pursuing a Master's in the U.S</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/MayDay7he5hy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/MayDay7he5hy" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/gaojuncheng020505@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my digital space! I'm thrilled you've stopped by. Here, you'll find a collection of my thoughts, stories, and insights, all curated with the hope of resonating with you.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#k8s%E5%88%9D%E5%AD%A6%E4%B9%A0%E2%80%94%E5%9F%BA%E4%BA%8Ek8s%E9%83%A8%E7%BD%B2nginx"><span class="toc-number">1.</span> <span class="toc-text">k8s初学习—基于k8s部署nginx</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230310101006602.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s初体验-minikube突破隔断访问限制(以nginx为例)"/></a><div class="content"><a class="title" href="/2023/11/10/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-minikube%E7%AA%81%E7%A0%B4%E9%9A%94%E6%96%AD%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6/" title="k8s初体验-minikube突破隔断访问限制(以nginx为例)">k8s初体验-minikube突破隔断访问限制(以nginx为例)</a><time datetime="2023-11-10T01:08:25.000Z" title="Created 2023-11-10 09:08:25">2023-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/" title="k8s初体验---nginx(pod)部署并访问"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s初体验---nginx(pod)部署并访问"/></a><div class="content"><a class="title" href="/2023/11/09/k8s%E5%88%9D%E4%BD%93%E9%AA%8C-nginx-pod-%E9%83%A8%E7%BD%B2%E5%B9%B6%E8%AE%BF%E9%97%AE/" title="k8s初体验---nginx(pod)部署并访问">k8s初体验---nginx(pod)部署并访问</a><time datetime="2023-11-09T10:26:19.000Z" title="Created 2023-11-09 18:26:19">2023-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1"><img src="https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s学习教程(基础配置)--part 1"/></a><div class="content"><a class="title" href="/2023/11/05/k8s%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B-%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-part-1/" title="k8s学习教程(基础配置)--part 1">k8s学习教程(基础配置)--part 1</a><time datetime="2023-11-05T12:25:42.000Z" title="Created 2023-11-05 20:25:42">2023-11-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/04/Devops/" title="Devops---基于Docker实现GitLab企业开发过程全自动化">Devops---基于Docker实现GitLab企业开发过程全自动化</a><time datetime="2023-11-04T12:48:41.000Z" title="Created 2023-11-04 20:48:41">2023-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's"><img src="https://picdm.sunbangyan.cn/2023/11/02/7f02a0746f7f0ac7d72a6727acf9b94f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="My Journey to Apply for Master's"/></a><div class="content"><a class="title" href="/2023/11/02/My-Journey-to-Apply-for-Master-s/" title="My Journey to Apply for Master's">My Journey to Apply for Master's</a><time datetime="2023-11-02T08:00:22.695Z" title="Created 2023-11-02 16:00:22">2023-11-02</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://luckyblob.oss-cn-shanghai.aliyuncs.com/postimgs/image-20230115202715679.png')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By Jensen Gao</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to Jensen's <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
